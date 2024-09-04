@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 import { ConfigProvider, Layout, theme } from 'antd';
@@ -47,7 +47,7 @@ export default function App() {
               borderRadius: borderRadiusLG,
             }}
           >
-            Content
+            <RouterProvider router={router} />
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
