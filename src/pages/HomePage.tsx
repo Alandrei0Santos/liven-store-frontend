@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ProductCarousel } from '../component/ProductCarousel';
+import { ProductCarousel } from '../components/ProductCarousel';
 import { fetchProducts } from '../resources/api/product.api';
 import { ProductResponse } from '../resources/interfaces/response/product.interface';
 
@@ -8,7 +8,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const carouselColumns = 2;
+  const [carouselColumns, setCarouselColumns] = useState(4);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -26,17 +26,40 @@ export default function HomePage() {
     getProducts();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  useEffect(() => {
+    // Function to update the number of carousel columns based on the window width
+    const updateCarouselColumns = () => {
+      if (window.innerWidth < 600) {
+        setCarouselColumns(1);
+      } else if (window.innerWidth < 1000) {
+        setCarouselColumns(2);
+      } else {
+        setCarouselColumns(4);
+      }
+    };
 
-  if (error) {
-    return <p>{error}</p>;
-  }
+    updateCarouselColumns();
+    window.addEventListener('resize', updateCarouselColumns);
+
+    return () => {
+      window.removeEventListener('resize', updateCarouselColumns);
+    };
+  }, []);
 
   return (
-    <div className="w-[800px]">
-      <ProductCarousel products={products} carouselColumns={carouselColumns} />
-    </div>
+    <>
+      <section aria-labelledby="products-heading">
+        <header className="mb-5">
+          <h1 id="products-heading">Products available {`🛍️`}</h1>
+        </header>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <ProductCarousel products={products} carouselColumns={carouselColumns} />
+        )}
+      </section>
+    </>
   );
 }

@@ -3,7 +3,8 @@
     "baseUrl": "src",
     "paths": {
       "@assets/*": ["assets/*"]
-    }
+    },
+    "types": ["vitest", "vitest/globals", "@testing-library/jest-dom"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "dist"],
